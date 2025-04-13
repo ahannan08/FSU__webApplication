@@ -1,0 +1,23 @@
+.results-section {
+    background-color: var(--fsu-white);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .results-header h2 {
+    color: var(--fsu-garnet);
+    font-size: 1.25rem;
+  }
+  
+  .results-count {
+    color: var(--fsu-garnet);
+    font-weight: bold;
+  }

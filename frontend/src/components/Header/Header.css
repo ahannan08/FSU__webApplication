@@ -1,0 +1,38 @@
+.header {
+    background-color: var(--fsu-garnet);
+    color: var(--fsu-white);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 60px;
+    height: 60px;
+    background-color: var(--fsu-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--fsu-garnet);
+  }
+  
+  .site-title h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .site-title p {
+    font-size: 0.875rem;
+    color: var(--fsu-gold);
+  }

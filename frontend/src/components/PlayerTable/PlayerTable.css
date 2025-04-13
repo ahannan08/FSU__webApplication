@@ -1,0 +1,115 @@
+.results-table-container {
+    overflow-x: auto;
+  }
+  
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .results-table th {
+    background-color: var(--fsu-garnet);
+    color: var(--fsu-white);
+    text-align: left;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    position: relative;
+  }
+  
+  .results-table th.sortable {
+    cursor: pointer;
+  }
+  
+  .results-table th.sortable:after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid var(--fsu-white);
+    opacity: 0.5;
+  }
+  
+  .results-table th.sorted-asc:after {
+    border-bottom: 5px solid var(--fsu-gold);
+    border-top: none;
+    opacity: 1;
+  }
+  
+  .results-table th.sorted-desc:after {
+    border-bottom: none;
+    border-top: 5px solid var(--fsu-gold);
+    opacity: 1;
+  }
+  
+  .results-table tbody tr {
+    border-bottom: 1px solid var(--medium-gray);
+  }
+  
+  .results-table tbody tr:nth-child(even) {
+    background-color: var(--light-gray);
+  }
+  
+  .results-table tbody tr:hover {
+    background-color: #f0e6d6;
+  }
+  
+  .results-table td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .player-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .player-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--fsu-gold);
+    margin-right: 10px;
+  }
+  
+  .player-name {
+    font-weight: bold;
+    color: var(--fsu-garnet);
+  }
+  
+  .stats-highlight {
+    font-weight: bold;
+    color: var(--fsu-garnet);
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--fsu-garnet);
+    font-style: italic;
+  }
+  
+  .performance-indicator {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  
+  .performance-high {
+    background-color: #2ecc71;
+  }
+  
+  .performance-avg {
+    background-color: var(--fsu-gold);
+  }
+  
+  .performance-low {
+    background-color: #e74c3c;
+  }
