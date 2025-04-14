@@ -1,29 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PlayerCard from "../components/PlayerCard/PlayerCard";
 import Spinner from "../components/spinner/Spinner";
+import { usePlayerRoster } from "../hooks/usePlayerRoster";
 import "./Roster.css";
-import axios from "axios";
 
 const Roster = () => {
-  const [players, setPlayers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchRoster = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/v1/player-roster");
-        setPlayers(response.data);
-      } catch (error) {
-        console.error("Failed to fetch player roster:", error);
-        setError("Unable to load roster. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRoster();
-  }, []);
+  const { players, loading, error } = usePlayerRoster();
 
   return (
     <div className="roster-container">
