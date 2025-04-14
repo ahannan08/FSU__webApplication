@@ -1,37 +1,44 @@
-// components/ResultsSection.js
 import React from 'react';
 import PlayerTable from '../PlayerTable/PlayerTable';
 import Pagination from '../Pagination/Pagination';
 import './ResultsSection.css';
+import Spinner from '../spinner/Spinner';
 
-const ResultsSection = ({ 
-  filteredData, 
-  currentPage, 
+const ResultsSection = ({
+  filteredData,
+  currentPage,
   setCurrentPage,
   itemsPerPage,
-  totalItems, // New prop for total items from API
+  totalItems,
   sortConfig,
   setSortConfig,
   filters,
-  isLoading // New prop for loading state
+  isLoading,
+  onSortChange // <-- Add this to parent if not already
 }) => {
-  // Calculate total pages using totalItems from API
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const safeData = Array.isArray(filteredData) ? filteredData : [];
 
-  // Show loading indicator when data is being fetched
+  const handleSort = (columnKey) => {
+    let direction = 'asc';
+    if (sortConfig?.key === columnKey && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    const newSort = { key: columnKey, direction };
+    setSortConfig(newSort);
+    onSortChange(newSort); // Trigger re-fetch from parent
+  };
+
   if (isLoading) {
     return (
       <section className="results-section">
         <div className="results-header">
           <h2>Player Game Statistics</h2>
         </div>
-        <div className="loading-indicator">Loading data...</div>
+        <Spinner />
       </section>
     );
   }
-
-  // Make sure filteredData is an array (to prevent "Cannot read properties of undefined" error)
-  const safeData = Array.isArray(filteredData) ? filteredData : [];
 
   return (
     <section className="results-section">
@@ -41,16 +48,16 @@ const ResultsSection = ({
           Showing {safeData.length} of {totalItems} results
         </span>
       </div>
-      
-      <PlayerTable 
-        data={safeData} // Using safe data that's guaranteed to be an array
+
+      <PlayerTable
+        data={safeData}
         sortConfig={sortConfig}
-        setSortConfig={setSortConfig}
         statCategory={filters.statCategory}
+        onSort={handleSort}
       />
-      
+
       {totalPages > 1 && (
-        <Pagination 
+        <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           setCurrentPage={setCurrentPage}

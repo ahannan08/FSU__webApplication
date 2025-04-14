@@ -1,14 +1,12 @@
 import React, { useMemo, useCallback } from 'react';
 import './PlayerTable.css';
 
-const PlayerTable = ({ data, sortConfig, setSortConfig, statCategory }) => {
+const PlayerTable = ({ data, sortConfig, onSort, statCategory }) => {
   // Memoize sort handler to prevent recreation on each render
   const handleSort = useCallback((key) => {
-    setSortConfig(prevConfig => ({
-      key, 
-      direction: prevConfig.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc'
-    }));
-  }, [setSortConfig]);
+    onSort(key); // ← just call onSort, let parent handle logic
+  }, [onSort]);
+  
 
 
 

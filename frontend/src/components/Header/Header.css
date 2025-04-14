@@ -36,3 +36,15 @@
     font-size: 0.875rem;
     color: var(--fsu-gold);
   }
+
+  /* Make sure links look like normal text (remove default styles) */
+a {
+  text-decoration: none;
+  color: inherit; /* Inherit the color of parent text */
+}
+
+/* Optionally, you can style the links as buttons or as desired */
+.site-title-link:hover, .logo:hover {
+  cursor: pointer;
+  color: #fafafa; /* Change color on hover */
+}

@@ -3,6 +3,8 @@ from typing import Optional
 from bson import ObjectId
 from database.database import db
 from fastapi.encoders import jsonable_encoder
+from pymongo import ASCENDING, DESCENDING
+
 
 # Get collection
 player_stats_collection = db.player_stats
@@ -14,7 +16,8 @@ def convert_doc_id(doc):
         del doc["_id"]
     return doc
 
-# Get all player stats with filtering and pagination
+
+
 async def get_player_stats(
     page: int = 1,
     page_size: int = 10,
@@ -23,68 +26,58 @@ async def get_player_stats(
     opponent: Optional[str] = None,
     season: Optional[str] = None,
     game_type: Optional[str] = None,
-    stat_category: Optional[str] = None
+    stat_category: Optional[str] = None,
+    sort_by: Optional[str] = None,
+    sort_order: Optional[str] = "desc"
 ):
-    # Calculate skip for pagination
     skip = (page - 1) * page_size
-    
-    # Build filter query
     query = {}
-    
+
     if player_name:
         query["playerName"] = {"$regex": player_name, "$options": "i"}
-    
     if position:
         query["position"] = position
-    
     if opponent:
         query["opponent"] = opponent
-    
     if season:
         query["season"] = season
-    
     if game_type:
         query["gameType"] = game_type
-    
-    # Add stat category filtering
+
+    # Only apply stat_category filter if provided explicitly (avoid when sorting)
     if stat_category:
+        or_conditions = []
         if stat_category == "passing":
-            query["$or"] = [{"passingYards": {"$gt": 0}}, {"passingTDs": {"$gt": 0}}]
+            or_conditions = [{"passingYards": {"$gt": 0}}, {"passingTDs": {"$gt": 0}}]
         elif stat_category == "rushing":
-            query["$or"] = [{"rushingYards": {"$gt": 0}}, {"rushingTDs": {"$gt": 0}}]
+            or_conditions = [{"rushingYards": {"$gt": 0}}, {"rushingTDs": {"$gt": 0}}]
         elif stat_category == "receiving":
-            query["$or"] = [{"receptions": {"$gt": 0}}, {"receivingYards": {"$gt": 0}}]
+            or_conditions = [{"receptions": {"$gt": 0}}, {"receivingYards": {"$gt": 0}}]
         elif stat_category == "defense":
-            query["$or"] = [
-                {"tackles": {"$gt": 0}}, 
-                {"sacks": {"$gt": 0}}, 
-                {"interceptions": {"$gt": 0}}
-            ]
+            or_conditions = [{"tackles": {"$gt": 0}}, {"sacks": {"$gt": 0}}, {"interceptions": {"$gt": 0}}]
         elif stat_category == "special-teams":
-            query["position"] = {"$in": ["K", "P"]}
-    
-    # Count total documents that match the query
+            query.setdefault("position", {"$in": ["K", "P"]})
+        if or_conditions:
+            query["$or"] = or_conditions
+
+    # Sort config
+    sort_field = sort_by if sort_by else "_id"
+    sort_dir = DESCENDING if sort_order == "desc" else ASCENDING
+
     total = player_stats_collection.count_documents(query)
-    
-    # Get results with pagination
-    cursor = player_stats_collection.find(query).skip(skip).limit(page_size)
+    cursor = player_stats_collection.find(query).sort(sort_field, sort_dir).skip(skip).limit(page_size)
     results = list(cursor)
-    
-    # Convert ObjectId to string
+
     for item in results:
         convert_doc_id(item)
-    
+
     return {
         "total": total,
         "page": page,
         "page_size": page_size,
-        "results": results
+        "results": jsonable_encoder(results)
     }
-    
-    
-    
-    
-    
+
     
 
 # Get a player stat by ID

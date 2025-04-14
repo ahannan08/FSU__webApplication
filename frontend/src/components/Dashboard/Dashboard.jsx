@@ -61,6 +61,8 @@ const Dashboard = () => {
           setSortConfig={setSortConfig}
           filters={filters}
           isLoading={isLoading}
+          onSortChange={() => loadData()} // ← Add this line to fix the error
+
         />
       </main>
     </div>

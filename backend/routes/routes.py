@@ -27,12 +27,14 @@ router = APIRouter(
 async def get_all_player_stats(
     page: int = Query(1, ge=1, description="Page number"),
     page_size: int = Query(10, ge=1, le=100, description="Number of items per page"),
-    player_name: Optional[str] = Query(None, description="Filter by player name"),
-    position: Optional[str] = Query(None, description="Filter by position"),
-    opponent: Optional[str] = Query(None, description="Filter by opponent"),
-    season: Optional[str] = Query(None, description="Filter by season"),
-    game_type: Optional[str] = Query(None, description="Filter by game type"),
-    stat_category: Optional[str] = Query(None, description="Filter by stat category")
+    player_name: Optional[str] = Query(None),
+    position: Optional[str] = Query(None),
+    opponent: Optional[str] = Query(None),
+    season: Optional[str] = Query(None),
+    game_type: Optional[str] = Query(None),
+    stat_category: Optional[str] = Query(None),
+    sort_by: Optional[str] = Query(None, description="Field to sort by"),
+    sort_order: Optional[str] = Query("desc", description="Sort direction: asc or desc")
 ):
     return await fetch_player_stats(
         page=page,
@@ -42,7 +44,9 @@ async def get_all_player_stats(
         opponent=opponent,
         season=season,
         game_type=game_type,
-        stat_category=stat_category
+        stat_category=stat_category,
+        sort_by=sort_by,
+        sort_order=sort_order
     )
 
 
