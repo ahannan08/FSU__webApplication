@@ -1,0 +1,28 @@
+.player-card {
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin: 12px;
+    width: 220px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .player-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .player-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .player-position {
+    font-size: 1rem;
+    color: #666;
+  }
+  

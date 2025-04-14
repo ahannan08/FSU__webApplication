@@ -1,0 +1,14 @@
+.about-container {
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .team-section {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    margin-top: 40px;
+  }
+  

@@ -1,32 +1,44 @@
-// components/PlayerTable.js
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import './PlayerTable.css';
 
 const PlayerTable = ({ data, sortConfig, setSortConfig, statCategory }) => {
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
-  };
+  // Memoize sort handler to prevent recreation on each render
+  const handleSort = useCallback((key) => {
+    setSortConfig(prevConfig => ({
+      key, 
+      direction: prevConfig.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  }, [setSortConfig]);
 
-  const getSortIndicator = (columnName) => {
+
+
+
+
+
+  // Memoize sort indicator function
+  const getSortIndicator = useCallback((columnName) => {
     if (sortConfig.key === columnName) {
       return sortConfig.direction === 'asc' ? ' sorted-asc' : ' sorted-desc';
     }
     return '';
-  };
+  }, [sortConfig]);
 
-  // Define columns based on statCategory
-  const columns = {
+
+
+
+
+
+  // Define all column configurations - moved outside component in a real app
+  const columnConfigs = useMemo(() => ({
     default: [
       { key: 'opponent', label: 'Game' },
       { key: 'date', label: 'Date' },
+      { key: 'result', label: 'Result' },
     ],
     passing: [
       { key: 'passingYards', label: 'Passing Yards' },
       { key: 'passingTDs', label: 'Passing TDs' },
+      { key: 'passingInt', label: 'Interceptions' },
     ],
     rushing: [
       { key: 'rushingYards', label: 'Rushing Yards' },
@@ -43,16 +55,67 @@ const PlayerTable = ({ data, sortConfig, setSortConfig, statCategory }) => {
       { key: 'interceptions', label: 'Interceptions' },
     ],
     'special-teams': [
-      { key: 'position', label: 'Position' },
+      { key: 'fieldGoals', label: 'Field Goals' },
+      { key: 'extraPoints', label: 'Extra Points' },
+      { key: 'punts', label: 'Punts' },
     ],
+    all: [
+      { key: 'passingYards', label: 'Passing Yards' },
+      { key: 'passingTDs', label: 'Passing TDs' },
+      { key: 'passingInt', label: 'Interceptions' },
+      { key: 'rushingYards', label: 'Rushing Yards' },
+      { key: 'rushingTDs', label: 'Rushing TDs' },
+      { key: 'receptions', label: 'Receptions' },
+      { key: 'receivingYards', label: 'Receiving Yards' },
+      { key: 'receivingTDs', label: 'Receiving TDs' },
+      { key: 'tackles', label: 'Tackles' },
+      { key: 'sacks', label: 'Sacks' },
+      { key: 'interceptions', label: 'Interceptions' },
+      { key: 'fieldGoals', label: 'Field Goals' },
+      { key: 'extraPoints', label: 'Extra Points' },
+      { key: 'punts', label: 'Punts' },
+    ]
+  }), []);
+
+
+
+
+
+  // Memoize selected columns based on statCategory
+  const selectedColumns = useMemo(() => [
+    ...columnConfigs.default,
+    ...(statCategory === 'all' || !statCategory 
+      ? columnConfigs.all 
+      : (columnConfigs[statCategory] || []))
+  ], [columnConfigs, statCategory]);
+
+
+
+
+  // Safety check - ensure data is an array
+  const safeData = Array.isArray(data) ? data : [];
+  
+
+
+  // Early return for empty data
+  if (safeData.length === 0) {
+    return <div className="results-table-container">
+      <div className="no-results">No results found</div>
+    </div>;
+  }
+
+
+
+  // Helper function to format cell content
+  const formatCellContent = (key, value) => {
+    if (value === undefined) return '-';
+    if (key === 'date' && value) return new Date(value).toLocaleDateString();
+    return value;
   };
 
-  // Combine default columns with selected stat category columns
-  const selectedColumns = [
-    ...columns.default,
-    ...(statCategory ? columns[statCategory] : Object.values(columns).flat()),
-  ];
 
+
+  
   return (
     <div className="results-table-container">
       <table className="results-table">
@@ -82,43 +145,37 @@ const PlayerTable = ({ data, sortConfig, setSortConfig, statCategory }) => {
           </tr>
         </thead>
         <tbody>
-          {data.length > 0 ? (
-            data.map((player) => (
-              <tr key={player.id}>
-                <td>
-                  <div className="player-info">
+          {safeData.map((player, index) => (
+            <tr key={player.id || index}>
+              <td>
+                <div className="player-info">
+                  {player.playerPhoto ? (
                     <img
                       className="player-photo"
                       src={player.playerPhoto}
                       alt={player.playerName}
                     />
-                    <span className="player-name">{player.playerName}</span>
-                  </div>
-                </td>
-                <td>{player.position}</td>
-                {selectedColumns.map((col) => (
-                  <td
-                    key={col.key}
-                    className={player[col.key] > 0 ? 'stats-highlight' : ''}
-                  >
-                    {col.key === 'date'
-                      ? new Date(player[col.key]).toLocaleDateString()
-                      : player[col.key]}
-                  </td>
-                ))}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={2 + selectedColumns.length} className="no-results">
-                No results found
+                  ) : (
+                    <div className="player-photo-placeholder"></div>
+                  )}
+                  <span className="player-name">{player.playerName}</span>
+                </div>
               </td>
+              <td>{player.position}</td>
+              {selectedColumns.map((col) => (
+                <td
+                  key={col.key}
+                  className={Number(player[col.key]) > 0 ? 'stats-highlight' : ''}
+                >
+                  {formatCellContent(col.key, player[col.key])}
+                </td>
+              ))}
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     </div>
   );
 };
 
-export default PlayerTable;
+export default React.memo(PlayerTable);

@@ -6,6 +6,10 @@ import Footer from './components/Footer/Footer';
 import Dashboard from './components/Dashboard/Dashboard';
 import { playerGameData } from './data/sample_data';
 import './App.css';
+import Roster from './pages/roster';
+import RosterByPosition from './pages/RosterByPosition';
+import Schedule from './components/Schedule/Schedule';
+import About from './pages/About';
 
 function App() {
   return (
@@ -14,6 +18,10 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path='/roster' element={<RosterByPosition/>}/>
+          <Route path='/calender' element={<Schedule/>}/>
+          <Route path='/about' element={<About/>}/>
+
         </Routes>
         <Footer />
       </div>
@@ -22,4 +30,3 @@ function App() {
 }
 
 export default App
-

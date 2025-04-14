@@ -1,0 +1,29 @@
+.schedule-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .react-calendar {
+    border: none;
+    width: 100%;
+  }
+  
+  .highlight {
+    background-color: #d90429 !important;
+    color: #fff;
+    border-radius: 8px;
+  }
+  
+  .match-info {
+    font-size: 0.6rem;
+    text-align: center;
+    margin-top: 2px;
+  }
+  
+  .match-teams {
+    display: block;
+    font-weight: bold;
+  }
+  

@@ -5,6 +5,13 @@
   border-bottom: 2px solid var(--fsu-gold);
   padding-bottom: 0.5rem;
 }
+.filter-section {
+  background-color: var(--fsu-white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem; /* spacing between filter and results */
+}
 
 .filter-form {
   display: grid;

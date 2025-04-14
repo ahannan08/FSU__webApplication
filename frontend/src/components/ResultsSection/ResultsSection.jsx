@@ -9,34 +9,44 @@ const ResultsSection = ({
   currentPage, 
   setCurrentPage,
   itemsPerPage,
+  totalItems, // New prop for total items from API
   sortConfig,
   setSortConfig,
-  filters // Add filters prop here
-
+  filters,
+  isLoading // New prop for loading state
 }) => {
-  // Calculate data for current page
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-  
-  // Calculate total pages
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  // Calculate total pages using totalItems from API
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  // Show loading indicator when data is being fetched
+  if (isLoading) {
+    return (
+      <section className="results-section">
+        <div className="results-header">
+          <h2>Player Game Statistics</h2>
+        </div>
+        <div className="loading-indicator">Loading data...</div>
+      </section>
+    );
+  }
+
+  // Make sure filteredData is an array (to prevent "Cannot read properties of undefined" error)
+  const safeData = Array.isArray(filteredData) ? filteredData : [];
 
   return (
     <section className="results-section">
       <div className="results-header">
         <h2>Player Game Statistics</h2>
         <span className="results-count">
-          Showing {filteredData.length} results
+          Showing {safeData.length} of {totalItems} results
         </span>
       </div>
       
       <PlayerTable 
-        data={currentItems} 
+        data={safeData} // Using safe data that's guaranteed to be an array
         sortConfig={sortConfig}
         setSortConfig={setSortConfig}
-        statCategory={filters.statCategory} // Pass the selected stat category
-
+        statCategory={filters.statCategory}
       />
       
       {totalPages > 1 && (

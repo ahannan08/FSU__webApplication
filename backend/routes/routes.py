@@ -8,6 +8,7 @@ from controllers.controllers import (
     get_distinct_opponents as fetch_distinct_opponents,
     get_distinct_game_types as fetch_distinct_game_types,
 )
+from database.database import player_stats_collection  # Add this import if not already present
 
 router = APIRouter(
     prefix="/api/v1",
@@ -88,3 +89,11 @@ async def get_distinct_opponents():
 @router.get("/player-stats/distinct/game-types", summary="Get all distinct game types")
 async def get_distinct_game_types():
     return await fetch_distinct_game_types()
+
+
+
+# Get simplified team roster
+@router.get("/player-roster", summary="Get simplified team roster")
+async def get_player_roster():
+    players = player_stats_collection.find({}, {"_id": 0, "playerName": 1, "position": 1, "starts": 1})
+    return list(players)
