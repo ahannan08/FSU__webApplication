@@ -1,13 +1,8 @@
 {
-    "headers": [
-      {
-        "source": "/(.*)",
-        "headers": [
-          {
-            "key": "Content-Security-Policy",
-            "value": "default-src 'self'; connect-src 'self' http://13.233.246.60 ws: wss:; img-src 'self' data:; font-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
-          }
-        ]
-      }
-    ]
-  }
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "http://13.233.246.60/api/v1/:path*"
+    }
+  ]
+}
