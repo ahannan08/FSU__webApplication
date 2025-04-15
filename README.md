@@ -4,6 +4,16 @@
 
 A full-stack web application to view and filter FSU player statistics using FastAPI (backend) and React.js (frontend).
 
+Home Screen
+![image](https://github.com/user-attachments/assets/7d26d91e-42b6-40fc-bead-b87b11e34fcb)
+
+Roster 
+![image](https://github.com/user-attachments/assets/d0d70321-30b3-4025-82cf-e1dde50dc5ef)
+
+Schedule
+![image](https://github.com/user-attachments/assets/0498b248-f7c1-4ac3-b290-33ee3cc02f93)
+
+
 ---
 
 ## 🚀 Run Locally
